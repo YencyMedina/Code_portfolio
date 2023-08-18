@@ -1,0 +1,13 @@
+import board
+import digitalio as dio
+import time
+
+led = dio.DigitalInOut(board.LED)
+led.direction = dio.Direction.OUTPUT
+
+button = dio.DigitalInOut(board.D2)
+button.direction = dio.Direction.INPUT
+
+while True:
+    led.value = not button.value
+    time.sleep(0.01)
