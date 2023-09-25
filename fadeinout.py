@@ -5,16 +5,25 @@ import random
 
 np = neopixel.NeoPixel(board.D2, 30, auto_write = False, brightness = .5)
 
-defcolor = [216, 231, 0]
-red = [255, 0, 0]
-black = [0,0,0]
-white = [255,255,255]
-blue = [0,0,255]
-green = [0,255,0]
-purple = [255,0,255]
-orange = [255, 64, 0]
+red = (255, 0, 0)
+black = (0,0,0)
+white = (255,255,255)
+blue = (0,0,255)
+green = (0,255,0)
+purple = (255,0,255)
+yellow = (255, 100, 0)
+orangeT = (255, 80, 0)
+orange = (255, 64, 0)
+lightBlue = (87, 232, 255)
+lightpurple = (227, 98, 255)
+darkpurple = (18,0,18)
+defaultcolor = [216, 231, 0]
+defcolor = [orange, yellow, orangeT]
+randcolor = random.choice(defcolor)
+defcolor2 = [lightBlue, lightBlue, white]
+randcolor2 = random.choice(defcolor2)
 
-color1 = [defcolor[0],defcolor[1],defcolor[2]]
+color1 = [defaultcolor[0],defaultcolor[1],defaultcolor[2]]
 np.fill(color1)
 '''
 Function: fade_out
@@ -25,16 +34,16 @@ Parameters: defcolor(list), delay(float)
 
 Return value: Prints the color values as they update
 '''
-def fade_out(defcolor, delay = 0.005):
-    fadeR = defcolor[0]/256.0
-    fadeG = defcolor[1]/256.0
-    fadeB = defcolor[2]/256.0
+def fade_out(defaultcolor, delay = 0.005):
+    fadeR = defaultcolor[0]/256.0
+    fadeG = defaultcolor[1]/256.0
+    fadeB = defaultcolor[2]/256.0
     for i in range(256):
-        color1[0] = int (defcolor[0] - (fadeR*i))
-        color1[1] = int (defcolor[1] - (fadeG*i))
-        color1[2] = int (defcolor[2] - (fadeB*i))
+        color1[0] = int (defaultcolor[0] - (fadeR*i))
+        color1[1] = int (defaultcolor[1] - (fadeG*i))
+        color1[2] = int (defaultcolor[2] - (fadeB*i))
         np.fill(color1)
-        print(i, defcolor,fadeR*i,fadeG*i,fadeB*i)
+        print(i, defaultcolor,fadeR*i,fadeG*i,fadeB*i)
         time.sleep(delay)
         np.show()
 
@@ -47,16 +56,16 @@ Parameters: defcolor(list), delay(float)
 
 Return value: Prints the color values as they update
 '''
-def fade_in(defcolor, delay = 0.005):
-    fadeR = defcolor[0]/256.0
-    fadeG = defcolor[1]/256.0
-    fadeB = defcolor[2]/256.0
+def fade_in(defaultcolor, delay = 0.005):
+    fadeR = defaultcolor[0]/256.0
+    fadeG = defaultcolor[1]/256.0
+    fadeB = defaultcolor[2]/256.0
     for i in range(256):
         color1[0] = int (fadeR*i)
         color1[1] = int (fadeG*i)
         color1[2] = int (fadeB*i)
         np.fill(color1)
-        print(i, defcolor,fadeR*i,fadeG*i,fadeB*i)
+        print(i, defaultcolor,fadeR*i,fadeG*i,fadeB*i)
         time.sleep(delay)
         np.show()
         
@@ -104,6 +113,37 @@ def chase(fgcolor = green, bgcolor = purple, speed = 0.005):
                 print("fColor",i,np[i])
             time.sleep(speed)
 
+def lightning(bgcolor = darkpurple, flash = randcolor2, numpix = np.n):
+    for i in range(50):
+        randomsleep = random.random()*10
+        randompix = random.randrange(3,8)
+        print("sleep", randomsleep)
+        np.fill(bgcolor)
+        np.show()
+        time.sleep(randomsleep)
+        for j in range(randompix):
+            np.fill(flash)
+            np.show()
+            time.sleep(0.05)
+            np.fill(bgcolor)
+            np.show()
+            time.sleep(0.01)
+
+def fire(fgcolor = white, bgcolor = black, num_sparks = 15):
+    for i in range(50):
+        np.fill(bgcolor)
+        np.show()
+        for j in range(num_sparks):
+            randcolor = random.choice(defcolor)
+            rand_int = random.randrange(0, 30)
+            rand_intT = random.randrange(0, 30)
+            randomsleep = random.random()/100
+            np[rand_int] = fgcolor
+            np[rand_intT] = black
+            np.show()
+            time.sleep(randomsleep)
+        np[rand_int] = bgcolor
+        np.show()
 
 while True:
     fade_out(purple)
@@ -123,3 +163,5 @@ while True:
     chase(orange, purple)
     fade_out(purple)
     fade_in(purple)
+    fire(randcolor, red)
+    lightning()
