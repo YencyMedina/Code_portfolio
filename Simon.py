@@ -35,6 +35,7 @@ led4.direction = dio.Direction.OUTPUT
 start = dio.DigitalInOut(board.D10)
 start.direction = dio.Direction.INPUT
 
+#displays the amount of points the user has, all lights is 10 while only green is 1
 def point_system():
     for i in range(int(points/10)):
         led.value = True
@@ -52,7 +53,7 @@ def point_system():
         time.sleep(0.2)
         led.value = False
         time.sleep(0.2)
-
+# displays the sequence the user has to repeat in order to progress
 def sequence():
     for colors in randcolor:
         if colors == 1:
@@ -76,11 +77,11 @@ def sequence():
             led4.value = False
             print("White")
         time.sleep(0.15)
-            
+# adds on to the sequence every time it is called            
 def addsequence():
     randcolor.append(random.choice(colors))
     print("-----")
-
+# checks for user input by going through the list and comparing it to the button check
 def user_input():
     for color in randcolor:
         check = 0
@@ -110,9 +111,8 @@ def user_input():
             return False
     print("-----" + "\n" + "correct")
     return True
-
+# When the start button is pressed started is set to true meaning the sequence can be displayed, once the sequence is done then the user check begins, if the check returns false the loop will exit and reset but display the amount of points first, if its true it will add a point and add on to the sequence.
 while True:
-    end = False
     randcolor = [random.choice(colors)]
     if start.value:
         started = True
